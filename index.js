@@ -5,7 +5,7 @@ const dotenv = require("dotenv")
 dotenv.config({path: '../.env' });
 
 const connectDB  = require("./Config/db")
-const authRoute = require("./routes/auth")
+const authRoute = require("./routes/Auth")
 const userRoute = require("./routes/Users")
 const notificationRoute = require("./routes/Notifications")
 const locationRoute = require("./routes/Location")
