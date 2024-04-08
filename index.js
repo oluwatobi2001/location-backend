@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv")
-
+const  ExpressBrute = require("express-brute")
 dotenv.config({path: '../.env' });
 
 const connectDB  = require("./Config/db")
@@ -14,7 +14,7 @@ const cors = require("cors")
 
 console.log(require("dotenv").config())
 
-
+const rateLimit  = require("express-rate-limit")
 
   /* app.post("/books", (req, res) => {
       const q = "INSERT INTO users (`username`, `email`,  `password`) VALUES (?)"
@@ -49,7 +49,12 @@ db.query(q,  (err, data) => {
 });
 
 */
+const limiter = rateLimit({
+    windowMs: 3 * 60 * 1000,
+    max: 2
 
+})
+app.use(limiter)
 app.use(cors({
 origin: '*',
 }))
@@ -57,7 +62,7 @@ app.use(express.json());
 connectDB()
 app.use(bodyParser.json());
 app.use(bodyParser.json())
-app.use("/api/auth", authRoute)
+app.use("/api/auth", limiter, authRoute)
 app.use("/api/locations", locationRoute)
 app.use("/api/users", userRoute)
 app.use("/api/notification", notificationRoute)

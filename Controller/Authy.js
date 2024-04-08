@@ -1,11 +1,17 @@
 const jwt  = require("jsonwebtoken")
 const userSchema  = require("../Schema/User");
 const Joi  = require("joi")
-
+const rateLimit  = require("express-rate-limit")
 const bcrypt = require("bcrypt");
 
 const {createNewColumn, checkRecordsExists, insertRecord} = require('../utils/sqlSchemaFunction')
 
+
+const limiter = rateLimit({
+    windowMs: 3 * 60 * 1000,
+    max: 7
+
+})
 const generateAcccessToken = (use) => {
     return jwt.sign({userID : use }, process.env.JWT, {expiresIn: "1d"});
 
